@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Freebie Check-in</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #f6f7f8;
+      --muted: #b1b6bd;
+      --paper: #141517;
+      --card: #1d1f22;
+      --line: #41444a;
+      --red: #ff2338;
+      --red-dark: #c9152a;
+      --cyan: #30e9f5;
+      --shadow: 0 18px 45px rgba(0, 0, 0, .36);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      position: relative;
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    }
+    body::before {
+      position: fixed;
+      z-index: 0;
+      inset: 0;
+      background-image:
+        radial-gradient(rgba(255, 255, 255, .14) .8px, transparent 1px),
+        repeating-linear-gradient(145deg, transparent 0 140px, rgba(255, 35, 56, .09) 141px 143px, transparent 144px 165px);
+      background-size: 11px 11px, 100% 100%;
+      content: "";
+      opacity: .34;
+      pointer-events: none;
+    }
+    main { position: relative; z-index: 1; width: min(1080px, calc(100% - 40px)); margin: 0 auto; padding: 54px 0 40px; }
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 12px;
+      color: var(--cyan);
+      font-size: 11px;
+      font-weight: 850;
+      letter-spacing: .19em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { width: 25px; height: 3px; background: var(--red); content: ""; box-shadow: 0 0 12px rgba(255, 35, 56, .7); }
+    h1 {
+      max-width: 760px;
+      margin: 0;
+      font-family: Impact, "Arial Black", "Segoe UI Black", sans-serif;
+      font-size: clamp(48px, 8vw, 82px);
+      font-weight: 900;
+      letter-spacing: -.035em;
+      line-height: .88;
+      text-transform: uppercase;
+      text-shadow: 4px 4px 0 rgba(255, 35, 56, .45);
+    }
+    h1 em { color: var(--red); font-style: normal; }
+    .intro { max-width: 630px; margin: 20px 0 0; color: var(--muted); font-size: 15px; line-height: 1.65; }
+    .summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 38px 0 16px;
+      padding-bottom: 11px;
+      border-bottom: 1px solid #3d4045;
+    }
+    .summary h2 { margin: 0; font-family: "Arial Black", "Segoe UI", sans-serif; font-size: 15px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+    .local-note { color: var(--cyan); font-size: 11px; }
+    .cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+    .card {
+      --accent: var(--red);
+      position: relative;
+      display: flex;
+      min-height: 310px;
+      flex-direction: column;
+      overflow: hidden;
+      padding: 23px;
+      border: 1px solid var(--line);
+      border-top: 2px solid var(--accent);
+      border-radius: 5px 17px 5px 17px;
+      background: linear-gradient(145deg, rgba(255, 255, 255, .035), transparent 44%), var(--card);
+      box-shadow: var(--shadow);
+    }
+    .card::after {
+      position: absolute;
+      top: -24px;
+      right: -35px;
+      width: 130px;
+      height: 72px;
+      transform: rotate(35deg);
+      background: repeating-linear-gradient(0deg, transparent 0 8px, color-mix(in srgb, var(--accent) 42%, transparent) 9px 11px);
+      content: "";
+      opacity: .34;
+      pointer-events: none;
+    }
+    .card:nth-child(2) { --accent: var(--cyan); }
+    .card:nth-child(3) { --accent: #ff5262; }
+    .card-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .store-icon {
+      display: grid;
+      width: 43px;
+      height: 43px;
+      place-items: center;
+      clip-path: polygon(0 0, 100% 0, 100% 77%, 77% 100%, 0 100%);
+      background: var(--accent);
+      color: #111315;
+      font-size: 14px;
+      font-weight: 950;
+      letter-spacing: -.04em;
+    }
+    .brand-logo { display: block; width: 36px; height: 36px; overflow: visible; }
+    .cadence { color: var(--accent); font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    h3 { margin: 20px 0 8px; font-size: 19px; letter-spacing: -.025em; }
+    .description { min-height: 53px; margin: 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
+    .actions { display: grid; gap: 9px; margin-top: auto; }
+    .button {
+      display: inline-flex;
+      min-height: 42px;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 14px;
+      border: 1px solid var(--red);
+      border-radius: 3px 10px 3px 10px;
+      background: var(--red);
+      color: #171719;
+      cursor: pointer;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 850;
+      letter-spacing: .025em;
+      text-align: center;
+      text-decoration: none;
+      transition: background .15s ease, border-color .15s ease, box-shadow .15s ease, transform .15s ease;
+    }
+    .button:hover { transform: translateY(-1px); background: #ff4052; border-color: #ff4052; box-shadow: 0 0 18px rgba(255, 35, 56, .25); }
+    .button:focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; }
+    .button.secondary { border-color: #555a60; background: #24272a; color: var(--ink); }
+    .button.secondary:hover { border-color: var(--accent); background: #292d31; box-shadow: 0 0 16px color-mix(in srgb, var(--accent) 20%, transparent); }
+    .reminder-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(280px, .9fr);
+      gap: 28px;
+      align-items: center;
+      margin-top: 20px;
+      padding: 24px;
+      border: 1px solid #41474c;
+      border-left: 3px solid var(--red);
+      border-radius: 4px 13px 4px 13px;
+      background: linear-gradient(115deg, rgba(255, 35, 56, .08), transparent 65%), #1b1d20;
+      box-shadow: var(--shadow);
+    }
+    .reminder-kicker { margin: 0 0 7px; color: var(--cyan); font-size: 10px; font-weight: 850; letter-spacing: .16em; text-transform: uppercase; }
+    .reminder-panel h2 { margin: 0; font-family: Impact, "Arial Black", sans-serif; font-size: clamp(24px, 3vw, 34px); font-weight: 800; letter-spacing: .01em; text-transform: uppercase; }
+    .reminder-copy { max-width: 470px; margin: 9px 0 0; color: var(--muted); font-size: 12px; line-height: 1.6; }
+    .reminder-form { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .reminder-form label { display: grid; gap: 7px; color: #d5d9dd; font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .reminder-form select, .reminder-form input {
+      width: 100%;
+      min-height: 42px;
+      padding: 9px 11px;
+      border: 1px solid #51565d;
+      border-radius: 4px 9px 4px 9px;
+      background: #24272a;
+      color: var(--ink);
+      font: inherit;
+      font-size: 13px;
+    }
+    .reminder-form select:focus-visible, .reminder-form input:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
+    .reminder-form .button, .reminder-status { grid-column: 1 / -1; }
+    .reminder-status { min-height: 16px; margin: -4px 0 0; color: #9da5ac; font-size: 10px; line-height: 1.5; }
+    .footnote {
+      display: grid;
+      grid-template-columns: 38px 1fr;
+      gap: 15px;
+      align-items: start;
+      margin-top: 20px;
+      padding: 19px 21px;
+      border: 1px solid #41474c;
+      border-left: 3px solid var(--cyan);
+      border-radius: 4px 13px 4px 13px;
+      background: linear-gradient(110deg, rgba(48, 233, 245, .07), transparent 65%), #1b1d20;
+    }
+    .footnote-mark { display: grid; width: 34px; height: 34px; place-items: center; clip-path: polygon(0 0, 100% 0, 100% 78%, 78% 100%, 0 100%); background: var(--cyan); color: #111315; font-weight: 900; }
+    .footnote strong { display: block; margin: 1px 0 5px; font-size: 12px; letter-spacing: .04em; text-transform: uppercase; }
+    .footnote p { margin: 0; color: #b1b8be; font-size: 12px; line-height: 1.6; }
+    footer { margin-top: 26px; color: #7f858b; font-size: 10px; letter-spacing: .08em; text-align: center; text-transform: uppercase; }
+
+    @media (max-width: 780px) {
+      main { padding-top: 38px; }
+      .cards { grid-template-columns: 1fr; }
+      .card { min-height: 0; }
+      .description { min-height: 0; }
+      .summary { align-items: flex-start; flex-direction: column; gap: 6px; }
+      .reminder-panel { grid-template-columns: 1fr; gap: 20px; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; } }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="eyebrow">Your weekly sweep</p>
+    <h1>Freebie<br><em>check-in.</em></h1>
+    <p class="intro">One quick stop for the stores you follow. Open a store when you’re ready, review the offer and license, then claim it yourself.</p>
+
+    <section aria-labelledby="stores-title">
+      <div class="summary">
+        <h2 id="stores-title">Your stores</h2>
+        <span class="local-note">Launcher and browser shortcuts</span>
+      </div>
+
+      <div class="cards">
+        <article class="card">
+          <div class="card-top">
+            <span class="store-icon" aria-hidden="true">
+              <svg class="brand-logo epic-logo" viewBox="0 0 64 64" focusable="false">
+                <path d="M10 7h44l-4 37L32 57 14 44z" fill="currentColor"/>
+                <text x="32" y="26" text-anchor="middle" fill="var(--accent)" font-family="Arial Black, sans-serif" font-size="11" font-weight="900" letter-spacing="-.8">EPIC</text>
+                <text x="32" y="35" text-anchor="middle" fill="var(--accent)" font-family="Arial, sans-serif" font-size="6.5" font-weight="900" letter-spacing="1.1">GAMES</text>
+              </svg>
+            </span>
+            <span class="cadence">Weekly offers</span>
+          </div>
+          <h3>Epic Games Store</h3>
+          <p class="description">Weekly giveaways. The launcher opens its Store section; use the browser link for the free games page.</p>
+          <div class="actions">
+            <a class="button" href="com.epicgames.launcher://store" title="Open the Epic Games Store app if it is installed">Open in Epic Launcher</a>
+            <a class="button secondary" href="https://store.epicgames.com/en-US/free-games" target="_blank" rel="noopener noreferrer">Open free games in browser</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-top">
+            <span class="store-icon" aria-hidden="true">
+              <svg class="brand-logo steam-logo" viewBox="0 0 64 64" focusable="false">
+                <circle cx="43" cy="20" r="15" fill="currentColor"/>
+                <circle cx="43" cy="20" r="8" fill="var(--accent)"/>
+                <circle cx="43" cy="20" r="3.5" fill="currentColor"/>
+                <path d="m31 30-12 12" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="7"/>
+                <circle cx="14" cy="47" r="8" fill="currentColor"/>
+                <circle cx="14" cy="47" r="4" fill="var(--accent)"/>
+              </svg>
+            </span>
+            <span class="cadence">Check promotions</span>
+          </div>
+          <h3>Steam</h3>
+          <p class="description">Browse current store specials. Some free-to-play or free-weekend offers do not add a permanent license.</p>
+          <div class="actions">
+            <a class="button" href="steam://openurl/https://store.steampowered.com/specials" title="Open Steam specials in the Steam app if it is installed">Open in Steam</a>
+            <a class="button secondary" href="https://store.steampowered.com/specials" target="_blank" rel="noopener noreferrer">Open specials in browser</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-top">
+            <span class="store-icon" aria-hidden="true">
+              <svg class="brand-logo fab-logo" viewBox="0 0 64 64" focusable="false">
+                <text x="32" y="43" text-anchor="middle" fill="currentColor" font-family="Arial Black, Segoe UI, sans-serif" font-size="31" font-style="italic" font-weight="900" letter-spacing="-3.5">fab</text>
+              </svg>
+            </span>
+            <span class="cadence">Monthly content</span>
+          </div>
+          <h3>Fab</h3>
+          <p class="description">Explore featured free assets and confirm the license that applies to each one.</p>
+          <div class="actions">
+            <a class="button" href="https://www.fab.com/" target="_blank" rel="noopener noreferrer">Open Fab</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="reminder-panel" aria-labelledby="reminder-title">
+      <div>
+        <p class="reminder-kicker">Set it once</p>
+        <h2 id="reminder-title">A weekly freebie reminder.</h2>
+        <p class="reminder-copy">Choose a day and time, then download a calendar event that repeats every week. Import the file into your calendar app once to get reminders even when this page is closed.</p>
+      </div>
+      <form class="reminder-form" id="reminder-form">
+        <label for="reminder-day">Day
+          <select id="reminder-day" name="day">
+            <option value="SU">Sunday</option>
+            <option value="MO">Monday</option>
+            <option value="TU">Tuesday</option>
+            <option value="WE">Wednesday</option>
+            <option value="TH" selected>Thursday</option>
+            <option value="FR">Friday</option>
+            <option value="SA">Saturday</option>
+          </select>
+        </label>
+        <label for="reminder-time">Local time
+          <input id="reminder-time" name="time" type="time" value="19:00" required>
+        </label>
+        <button class="button" type="submit">Download weekly reminder</button>
+        <p class="reminder-status" id="reminder-status" role="status">Default schedule: Thursday at 7:00 PM local time. You can change it before downloading.</p>
+      </form>
+    </section>
+
+    <aside class="footnote" aria-label="How this helper works">
+      <span class="footnote-mark" aria-hidden="true">i</span>
+      <div>
+        <strong>You stay in control of every claim.</strong>
+        <p>This page does not sign in, read store listings, or click claim buttons. Launcher links open only when you click them; review each offer and accept its license in the store.</p>
+      </div>
+    </aside>
+    <footer>No account credentials or store data are collected.</footer>
+  </main>
+
+  <script>
+    (() => {
+      const form = document.querySelector("#reminder-form");
+      const status = document.querySelector("#reminder-status");
+      const weekdayNumbers = { SU: 0, MO: 1, TU: 2, WE: 3, TH: 4, FR: 5, SA: 6 };
+      const pad = (value) => String(value).padStart(2, "0");
+
+      const formatLocalDateTime = (date) =>
+        `${date.getFullYear()}${pad(date.getMonth() + 1)}${pad(date.getDate())}T${pad(date.getHours())}${pad(date.getMinutes())}00`;
+
+      const foldLine = (line) => line.match(/.{1,70}/g).join("\r\n ");
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const day = form.elements.day.value;
+        const [hour, minute] = form.elements.time.value.split(":").map(Number);
+        if (!Number.isInteger(hour) || !Number.isInteger(minute)) {
+          status.textContent = "Choose a valid reminder time first.";
+          return;
+        }
+
+        const now = new Date();
+        const firstEvent = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hour, minute, 0, 0);
+        const daysUntil = (weekdayNumbers[day] - now.getDay() + 7) % 7;
+        firstEvent.setDate(firstEvent.getDate() + daysUntil);
+        if (firstEvent <= now) firstEvent.setDate(firstEvent.getDate() + 7);
+
+        const stamp = new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d{3}Z$/, "Z");
+        const calendarLines = [
+          "BEGIN:VCALENDAR",
+          "VERSION:2.0",
+          "PRODID:-//Freebie Check-in//Weekly Reminder//EN",
+          "CALSCALE:GREGORIAN",
+          "BEGIN:VEVENT",
+          `UID:${Date.now()}-${Math.random().toString(16).slice(2)}@freebie-checkin.local`,
+          `DTSTAMP:${stamp}`,
+          `DTSTART:${formatLocalDateTime(firstEvent)}`,
+          "DURATION:PT15M",
+          `RRULE:FREQ=WEEKLY;BYDAY=${day}`,
+          "SUMMARY:Check weekly free game and asset offers",
+          "DESCRIPTION:Review offers on Epic Games Store, Steam, and Fab. Claim manually in the official store.",
+          "BEGIN:VALARM",
+          "ACTION:DISPLAY",
+          "TRIGGER:-PT0M",
+          "DESCRIPTION:Check this week's free offers",
+          "END:VALARM",
+          "END:VEVENT",
+          "END:VCALENDAR"
+        ];
+        const calendarText = calendarLines.map(foldLine).join("\r\n") + "\r\n";
+        const calendarFile = new Blob([calendarText], { type: "text/calendar;charset=utf-8" });
+        const downloadLink = document.createElement("a");
+        downloadLink.href = URL.createObjectURL(calendarFile);
+        downloadLink.download = "freebie-checkin-weekly.ics";
+        downloadLink.click();
+        window.setTimeout(() => URL.revokeObjectURL(downloadLink.href), 1000);
+
+        const firstDateLabel = new Intl.DateTimeFormat(undefined, { dateStyle: "medium", timeStyle: "short" }).format(firstEvent);
+        status.textContent = `Reminder downloaded. First event: ${firstDateLabel}. Import the .ics file into your calendar app.`;
+      });
+    })();
+  </script>
+</body>
+</html>
