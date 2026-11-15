@@ -180,6 +180,12 @@
     .reminder-form select:focus-visible, .reminder-form input:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
     .reminder-form .button, .reminder-status { grid-column: 1 / -1; }
     .reminder-status { min-height: 16px; margin: -4px 0 0; color: #9da5ac; font-size: 10px; line-height: 1.5; }
+    .reminder-steps { grid-column: 1 / -1; padding-top: 17px; border-top: 1px solid #41474c; color: #c2c7cc; font-size: 12px; line-height: 1.65; }
+    .reminder-steps summary { color: var(--cyan); cursor: pointer; font-size: 11px; font-weight: 850; letter-spacing: .1em; text-transform: uppercase; }
+    .reminder-steps ol { display: grid; gap: 10px; margin: 13px 0 0; padding-left: 22px; }
+    .reminder-steps ul { display: grid; gap: 7px; margin: 7px 0 0; padding-left: 20px; }
+    .reminder-steps li { padding-left: 3px; }
+    .reminder-steps a { color: var(--cyan); }
     .footnote {
       display: grid;
       grid-template-columns: 38px 1fr;
@@ -284,7 +290,7 @@
       <div>
         <p class="reminder-kicker">Set it once</p>
         <h2 id="reminder-title">A weekly freebie reminder.</h2>
-        <p class="reminder-copy">Choose a day and time, then download a calendar event that repeats every week. Import the file into your calendar app once to get reminders even when this page is closed.</p>
+        <p class="reminder-copy">Choose a day and time, then download a calendar event that repeats every week. Import the file once to get reminders even when this page is closed.</p>
       </div>
       <form class="reminder-form" id="reminder-form">
         <label for="reminder-day">Day
@@ -304,6 +310,20 @@
         <button class="button" type="submit">Download weekly reminder</button>
         <p class="reminder-status" id="reminder-status" role="status">Default schedule: Thursday at 7:00 PM local time. You can change it before downloading.</p>
       </form>
+      <details class="reminder-steps" open>
+        <summary>How to add the downloaded reminder</summary>
+        <ol>
+          <li>Choose the day and local time above, then select <strong>Download weekly reminder</strong>. Your browser saves <code>freebie-checkin-weekly.ics</code>.</li>
+          <li>Import that file into your calendar:
+            <ul>
+              <li><strong>Google Calendar:</strong> Google requires importing .ics files from a computer. Open Google Calendar, go to <strong>Settings → Import &amp; export</strong>, choose <strong>Select file from your computer</strong>, select the downloaded file, choose a calendar, and click <strong>Import</strong>. If you use Google Calendar on Android, do this step on a computer; the event should appear on your phone after calendar sync.</li>
+              <li><strong>Another calendar app:</strong> open the downloaded .ics file and choose its add/import option if offered. The exact steps depend on the app.</li>
+            </ul>
+          </li>
+          <li>In your calendar, confirm the event appears on the selected day and repeats weekly. If it has no alert, add one in the event settings, and make sure calendar notifications are enabled.</li>
+        </ol>
+        <p>See <a href="https://support.google.com/calendar/answer/37118" target="_blank" rel="noopener noreferrer">Google’s official import instructions</a>.</p>
+      </details>
     </section>
 
     <aside class="footnote" aria-label="How this helper works">
